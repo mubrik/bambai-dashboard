@@ -1,0 +1,12 @@
+# Ignore all HTML files:
+**/*.html
+routeTree.gen.ts
+postcss.config.js
+STYLEGUIDE.md
+README.md
+package.json
+vite.config.ts
+src/vite-env.d.ts
+tailwind.config.js
+tsconfig.app.json
+tsconfig.json

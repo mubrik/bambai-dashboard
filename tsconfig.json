@@ -19,7 +19,26 @@
       }
     ],
     "paths": {
-      "@src/*": ["./src/*"]
+      "@src/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+      "@api/*": ["./src/api/*"],
+      "@authPages/*": ["./src/app/(auth)/*"],
+      "@mainPages/*": ["./src/app/(pages)/*"],
+      "@constantsDir/*": ["./src/constants/*"],
+      "@assets/*": ["./public/*"],
+      "@assetImages/*": ["./public/images/*"],
+      "@assetSvgs/*": ["./public/svgs/*"],
+      "@providers/*": ["./src/providers/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@serverActions/*": ["./src/api/actions/*"],
+      "@serverStream/*": ["./src/api/stream/*"],
+      "@constants": ["./src/constants/index"],
+      "@endpoints": ["./src/constants/endpoints"],
+      "@queryKeys": ["./src/constants/queryKeys"],
+      "@schemas": ["./src/constants/schemas"],
+      "@queryclient": ["./src/providers/queryProvider/getQueryClient"],
+      "@types": ["./src/types/index"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
