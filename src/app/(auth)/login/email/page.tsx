@@ -5,7 +5,7 @@ import {FormProvider, SubmitHandler, useForm} from 'react-hook-form';
 import {Typography} from '@mui/material';
 /* queries */
 /* import { loginUser } from "@src/api/actions/authActions"; */
-import {useAuthLogin} from '@api/auth';
+import {useAuthLogin} from '@api/auth/queries';
 import {getMessageFromAPIError} from '@api/shared/apiClient';
 /* compos */
 import {MuiButton} from '@components/button/button';
@@ -33,6 +33,7 @@ export default function EmailLogin() {
   };
 
   const _errMsg = getMessageFromAPIError(loginErr, '');
+  const _clearErr = () => {if (_errMsg) reset()};
 
   return (
     <FormProvider {...form}>
@@ -57,6 +58,7 @@ export default function EmailLogin() {
             label="Enter Email Address"
             validationRules={{required: 'This field is required'}}
             errorMsg={_errMsg ? ' ' : ''}
+            onChange={_clearErr}
           />
           <div>
             <TextInputFC
@@ -65,6 +67,7 @@ export default function EmailLogin() {
               label="Enter password here"
               validationRules={{required: 'This field is required'}}
               errorMsg={_errMsg}
+              onChange={_clearErr}
             />
           </div>
           <div className="flex flex-col gap-2">

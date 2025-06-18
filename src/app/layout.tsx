@@ -45,7 +45,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable} antialiased`}>
+      <body id='app' className={`${roboto.variable} antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -8,7 +8,7 @@ export async function createCookieToken(token: string) {
   cookieStore.set({
     name: 'token',
     value: token,
-    httpOnly: true,
+    httpOnly: false,
     secure: true,
     sameSite: 'lax',
     path: '/',

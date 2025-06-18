@@ -20,7 +20,7 @@ const transitionDuration = 700;
 
 interface SidebarItemProps {
   name: string;
-  icon: string;
+  icon?: string;
   subItems?: {name: string; path: string; icon?: string}[];
   path?: string;
   onPress?: () => void;
@@ -42,13 +42,43 @@ const SIDEBAR_ITEMS: SidebarItemProps[] = [
   },
 ];
 
-const SidebarItem = ({name, path, subItems, icon, isCollapsed, onPress}: SidebarItemProps) => {
+function SidebarLink({name, path, icon, isCollapsed, onPress}: SidebarItemProps) {
   const pathname = usePathname();
   const isActive = !!(path && path === pathname);
 
+  return (
+    <Link
+      key={name}
+      href={path!}
+      className={cn(
+        'flex flex-row justify-start items-center p-2 rounded gap-2 transition-all duration-500',
+        'hover:bg-sidebar-item-bg rounded',
+        isCollapsed && 'justify-center p-0',
+        isActive && 'bg-sidebar-item-bg',
+      )}
+      onClick={onPress}
+    >
+      <>
+        {icon ? (
+          <Image
+            src={icon}
+            className="text-2xl"
+            style={{
+              stroke: isActive && isCollapsed ? '#6577FF' : '',
+            }}
+            alt="icon"
+          />
+        ) : null}
+        {!isCollapsed ? <Typography variant="body2">{name}</Typography> : null}
+      </>
+    </Link>
+  );
+}
+
+const SidebarItem = ({name, path, subItems, icon, isCollapsed, onPress}: SidebarItemProps) => {
   if (!path && subItems?.length) {
     if (isCollapsed) {
-      return <Image src={icon} className="text-2xl" alt="icon" />;
+      return <Image src={icon ?? ''} className="text-2xl" alt="icon" />;
     }
 
     return (
@@ -79,69 +109,28 @@ const SidebarItem = ({name, path, subItems, icon, isCollapsed, onPress}: Sidebar
             },
           }}
         >
-          <Image src={icon} className="text-2xl" alt="icon" />
+          <Image src={icon ?? ''} className="text-2xl" alt="icon" />
           <Typography component="span" variant="body2">
             {name}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
           {subItems.map((subItem) => (
-            <Link
+            <SidebarLink
               key={subItem.name}
-              href={subItem.path!}
-              className={cn(
-                'flex flex-row justify-start items-center p-2 rounded gap-2 transition-all duration-500',
-                'hover:bg-sidebar-item-bg rounded',
-                isCollapsed && 'justify-center p-0',
-                isActive && 'bg-sidebar-item-bg',
-              )}
-              onClick={onPress}
-            >
-              <>
-                {subItem.icon ? (
-                  <Image
-                    src={subItem.icon}
-                    className="text-2xl"
-                    style={{
-                      stroke: isActive && isCollapsed ? '#6577FF' : '',
-                    }}
-                    alt="icon"
-                  />
-                ) : null}
-                {!isCollapsed ? <Typography variant="body2">{subItem.name}</Typography> : null}
-              </>
-            </Link>
+              name={subItem.name}
+              path={subItem.path!}
+              icon={subItem.icon}
+              isCollapsed={isCollapsed}
+              onPress={onPress}
+            />
           ))}
         </AccordionDetails>
       </Accordion>
     );
   }
 
-  return (
-    <Link
-      key={name}
-      href={path!}
-      className={cn(
-        'flex flex-row justify-start items-center p-2 rounded gap-2 transition-all duration-500',
-        'hover:bg-sidebar-item-bg rounded',
-        isCollapsed && 'justify-center p-0',
-        isActive && 'bg-sidebar-item-bg',
-      )}
-      onClick={onPress}
-    >
-      <>
-        <Image
-          src={icon}
-          className="text-2xl"
-          style={{
-            stroke: isActive && isCollapsed ? '#6577FF' : '',
-          }}
-          alt="icon"
-        />
-        {!isCollapsed ? <Typography variant="body2">{name}</Typography> : null}
-      </>
-    </Link>
-  );
+  return <SidebarLink name={name} path={path} icon={icon} isCollapsed={isCollapsed} onPress={onPress} />;
 };
 
 export const Sidebar = () => {
