@@ -23,11 +23,13 @@ apiClient.interceptors.request.use(
       if (token) {
         config.headers['x-access-token'] = `${token}`;
       }
+      console.log("isServerSide token", token);
     } else {
-      const {getAuthToken} = await import('./localCookie'),
-        token = getAuthToken();
-      if (token) {
-        config.headers['x-access-token'] = `${token}`;
+      const {getAuthToken} = await import('./localCookie');
+      const _token = getAuthToken();
+      console.log("local token", _token);
+      if (_token) {
+        config.headers['x-access-token'] = `${_token}`;
       }
     }
 

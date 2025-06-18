@@ -1,3 +1,4 @@
+"use client"
 import {useEffect} from 'react';
 import {useQuery, UseQueryOptions, QueryKey} from '@tanstack/react-query';
 import useToast from '@providers/toastProvider/useToast';

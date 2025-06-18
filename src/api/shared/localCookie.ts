@@ -9,11 +9,12 @@ export function getAuthToken(): string | undefined {
 }
 
 /**
- * Sets the authentication token in cookies
+ * Sets the authentication token in cookies, ideally shouldnt ever need to call thisa stoken will be
+ * set from nextjs side
  * @param token - The token to store
  * @param expires - Number of days until cookie expires (default: 7)
  */
-export function setAuthToken(token: string, expires?: number): void {
+export function setAuthToken(token: string, expires: number = 7): void {
   Cookies.set('token', token, {expires, path: '/', secure: true, sameSite: 'lax'});
 }
 

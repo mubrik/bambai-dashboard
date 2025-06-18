@@ -1,13 +1,7 @@
-import {use} from 'react';
+"use client"
 import {TableMUI} from '@components/table/table';
-import {QueryFilterParams, PaginatedItem, Student, ActionPromiseResponse} from '@types';
+import {useGetStudentsWithFilterSuspense} from '@src/api/student/queries';
 
-interface TableSectionProps {
-  getData?: ActionPromiseResponse<PaginatedItem<Student>>;
-  params?: QueryFilterParams;
-  data?: PaginatedItem<Student>;
-  searchParams?: Promise<{[key: string]: string | string[] | undefined}>;
-}
 
 const BASE_TABLE_COLUMNS = {
   studentID: {
@@ -45,13 +39,8 @@ const BASE_TABLE_COLUMNS = {
   actions: {headerContent: 'Action', align: 'left'},
 } as const;
 
-export function StudentTableSection({getData, searchParams}: TableSectionProps) {
-  const param = use(searchParams!);
-  const {error, data} = use(getData!);
-
-  if (error) {
-    return <div> error fetching student data</div>;
-  }
+export function SuspenseStudentTable({}) {
+  const {data} = useGetStudentsWithFilterSuspense();
 
   const tableData = data?.records?.map((x) => {
     return {

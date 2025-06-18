@@ -1,16 +1,21 @@
-import {getFilteredSchools} from '@src/api/stream/school';
-import {SchoolTable} from './_components/table';
+import {HydrationTableWrapper} from '@src/components/table/tableSuspenseWrapper';
+import {getSchoolsWithFiltersQueryOpts} from '@api/school/shared';
+import {getQueryClient} from '@queryclient';
+import {SuspendSchoolTable} from './_components/table';
+import type {SearchParams} from '@src/types';
 
-export default async function SchoolsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{[key: string]: string | string[] | undefined}>;
-}) {
-  const schools = await getFilteredSchools({searchParams});
+export default async function SchoolsPage({searchParams}: {searchParams: SearchParams}) {
+  const params = await searchParams;
+  const qc = getQueryClient();
 
-  if (schools.error || !schools.data) {
-    return <div>An Error Occured</div>;
-  }
+  qc.prefetchQuery(getSchoolsWithFiltersQueryOpts(params));
 
-  return <SchoolTable data={schools.data} />;
+  return (
+    <div>
+      <p>Placeholder</p>
+      <HydrationTableWrapper queryClient={qc}>
+        <SuspendSchoolTable />
+      </HydrationTableWrapper>
+    </div>
+  );
 }

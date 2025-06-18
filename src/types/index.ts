@@ -22,6 +22,9 @@ export type ActionResponse<T> = ActionErrorResponse | ActionSuccessResponse<T>;
 
 export type ActionPromiseResponse<T> = Promise<ActionResponse<T>>;
 
+export type BaseParams = {[key: string]: string | string[] | undefined};
+export type SearchParams = Promise<BaseParams>;
+
 export interface LoginUserData {
   email: string;
   password?: string;
@@ -88,34 +91,86 @@ interface CurrentRegion {
   isPipelineReady: boolean;
 }
 
+interface Role {
+  _id: string;
+  name: string;
+  accessLevel: number;
+  pages: string[];
+}
+
+interface Domain {
+  region: CurrentRegion;
+  role: Role;
+  pages: [];
+  schools: [];
+  schoolList: [];
+  _id: string;
+}
+
+// prev Staff academic year
+interface UserAcademicYear {
+  _id: string;
+  user: string;
+  academicYearSetting: string;
+  classes: {
+    _id: string;
+    isPrimary?: boolean;
+    isSecondary?: boolean;
+    subjects: {_id: string; isSecondary: boolean}[];
+  }[];
+  createdAt: string;
+  staff: string;
+  updatedAt: string;
+  updatedBy: string;
+}
+
 export interface User {
   _id: string;
   fullName: string | null;
-  regionName: string;
   email: string;
-  password?: string;
-  registrationType?: string;
-  profileType?: string;
   phoneNumber?: string;
-  countryCode?: string;
+  profileType?: string;
   modeOfNotice?: string;
+  currentRegion: CurrentRegion;
+  deleted?: boolean;
+  domains: Domain[];
+  registrationType?: string;
+  countryCode?: string;
   authType?: 'email' | 'phone';
   containsSampleData?: boolean;
   practiceModeStatus?: number;
   showMobileAppDownloadInstructions?: boolean;
-  deleted?: boolean;
   createdAt: string;
   updatedAt: string;
   classFilter?: string[];
+  schoolsFilter?: string[];
   firstLogin?: boolean;
+  isProfileAccount?: boolean;
   lastLogin?: string;
   status?: string;
   academicYearSettingFilter?: string;
   enableParentCommunication?: boolean;
+  userAcademicYear?: UserAcademicYear;
   academicYearSetting: UserAcademicYearSetting;
-  currentRegion: CurrentRegion;
-  profile: Record<string, unknown>;
-  domains: [];
+  profile: {
+    notifications: {
+      emailOnUnusualActivity: boolean;
+      emailOnNewBrowserSignin: boolean;
+      emailSalesAndNews: boolean;
+      emailOnNewFeatureUpdates: boolean;
+      emailTips: boolean;
+    };
+    saveActivityLog: boolean;
+  };
+  preferenceSettings: {
+    showPromoteStudentPrompt: boolean;
+    showConfirmSwitchingAYPrompt: boolean;
+  };
+  otpTracker?: {
+    isOtpLocked: boolean;
+    otpFailCount: number;
+    otpLockDate: string;
+  };
 }
 
 export interface QueryFilterParams {

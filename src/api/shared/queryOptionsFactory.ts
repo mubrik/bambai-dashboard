@@ -4,7 +4,7 @@ import apiClient from './apiClient';
 interface OptsParam<T> {
   queryKey: string[] | readonly string[];
   url?: string;
-  queryFn: QueryFunction<T>;
+  queryFn?: QueryFunction<T>;
 }
 
 export function queryOptsFactory<T>({queryFn, queryKey, url = ''}: OptsParam<T>) {

@@ -5,7 +5,7 @@ import {TESTING_IDS_MAP} from '@constants';
 import useSidebarContext from '@providers/sidebarProvider/useSidebarContext';
 import useIsMobile from '@hooks/useIsMobile';
 /* queries */
-import {logoutUser} from '@src/api/actions/authActions';
+import {useLogout, useAuthUser} from '@api/auth/queries';
 /* icons */
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -41,7 +41,8 @@ export const Navbar = ({
 }: Props) => {
   const {showSidebar, setShowSidebar} = useSidebarContext();
   const isMobileScreen = useIsMobile();
-  const isLoading = false;
+  const logoutFn = useLogout();
+  const {data: userData, isLoading} = useAuthUser();
   const [anchorEl, setAnchorEl] = useState<null | Element>(null);
 
   const [searchExpanded, setSearchExpanded] = useState(false);
@@ -93,11 +94,11 @@ export const Navbar = ({
           data-test={`${TESTING_IDS_MAP.NAVBAR}_menu`}
         >
           <Typography variant="caption" color="primary">
-            {isLoading ? <Skeleton /> : 'Admin'}
+            {isLoading ? <Skeleton /> : userData?.domains[0]?.role?.name || ""}
           </Typography>
           <div className="flex flex-row items-center">
             <Typography variant="body2" color="textPrimary">
-              {isLoading ? <Skeleton /> : 'placeholder'}
+              {isLoading ? <Skeleton /> : userData?.fullName || ""}
             </Typography>
             <ArrowDropDownOutlinedIcon sx={{fontSize: 24}} />
           </div>
@@ -165,7 +166,6 @@ export const Navbar = ({
           <MenuItem
             onClick={() => {
               handleClose();
-              /* navigate('/user/profile'); */
             }}
             className="mb-2"
             data-test={`${TESTING_IDS_MAP.NAVBAR}_view-profile`}
@@ -176,7 +176,7 @@ export const Navbar = ({
           <MenuItem
             onClick={async () => {
               handleClose();
-              void logoutUser();
+              void logoutFn();
             }}
             data-test={`${TESTING_IDS_MAP.NAVBAR}_signout`}
           >

@@ -1,3 +1,4 @@
+"use client"
 import {useMutation, MutateFunction} from '@tanstack/react-query';
 import {getQueryClient} from '@queryclient';
 import {getMessageFromAPIError} from './apiClient';

@@ -1,6 +1,7 @@
 'use client';
 import {TableMUI} from '@components/table/table';
-import {QueryFilterParams, PaginatedItem, School, ActionPromiseResponse} from '@types';
+import {useGetSchoolsWithFilterSuspense} from '@api/school/queries';
+import {PaginatedItem, School} from '@types';
 
 interface TableSectionProps {
   data: PaginatedItem<School>;
@@ -33,6 +34,35 @@ const BASE_TABLE_COLUMNS = {
 } as const;
 
 export function SchoolTable({data}: TableSectionProps) {
+  const tableData = data?.records?.map((x) => {
+    return {
+      content: {
+        schoolID: x.schoolID,
+        name: x.schoolName,
+        code: x.schoolCode,
+        numOfStudents: x.noOfStudents,
+      },
+      tableOptions: {
+        rowKey: x._id,
+        school: x,
+      },
+    };
+  });
+  const total = data?.total ?? 0;
+
+  return (
+    <TableMUI
+      paginateSearchParams
+      columns={BASE_TABLE_COLUMNS}
+      rows={tableData}
+      totalNumOfRows={total}
+      enablePagination={total > 10}
+    />
+  );
+}
+
+export function SuspendSchoolTable() {
+  const {data} = useGetSchoolsWithFilterSuspense();
   const tableData = data?.records?.map((x) => {
     return {
       content: {

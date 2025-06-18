@@ -1,12 +1,16 @@
+'use client';
 import {useCallback} from 'react';
+import apiClient, {getMessageFromAPIError} from '../shared/apiClient';
+import useMutationInternal from '../shared/useMutationInternal';
+import {removeAuthToken} from '../shared/localCookie';
+import {getAuthUserQueryOpts} from './shared';
+import {storeCookie, clearCookie} from '../actions/authActions';
 import {getQueryClient} from '@queryclient';
-import apiClient, {getMessageFromAPIError} from './shared/apiClient';
-import useMutationInternal from './shared/useMutationInternal';
 import useToast from '@providers/toastProvider/useToast';
-import {storeCookie, clearCookie} from './actions/authActions';
 import {QUERY_KEYS} from '@queryKeys';
 import {API_ENDPOINTS} from '@endpoints';
 import type {User, LoginUserData} from '@types';
+import useFetchOptsInternal from '../shared/useFetchOptsInternal';
 
 export function useAuthLogin() {
   const queryClient = getQueryClient();
@@ -58,10 +62,18 @@ export function useAuthSendOTP() {
   });
 }
 
+export function useAuthUser() {
+  return useFetchOptsInternal({
+    queryOpts: getAuthUserQueryOpts(),
+    showToastOnError: false,
+  });
+}
+
 export function useLogout() {
   const queryClient = getQueryClient();
 
   return useCallback(async () => {
+    removeAuthToken();
     await clearCookie();
     queryClient.clear();
   }, [queryClient]);
